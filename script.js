@@ -78,7 +78,8 @@ const currencies = new Map([
 ]);
 
 let currentAccount;
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
+  if (sort) movements = [...movements].sort((a, b) => a - b);
   containerMovements.innerHTML = '';
   movements.forEach((mov, i) => {
     // ELEMENT HTML FOR MOVEMENTS
@@ -155,7 +156,6 @@ function displayAll() {
 
 function loginFunction(a) {
   a.preventDefault();
-  console.log(accounts);
   let login = inputLoginUsername.value;
   let pin = inputLoginPin.value;
   function findAccount(login, pin) {
@@ -242,8 +242,13 @@ const requestLoan = function (e) {
     displayAll();
   }
 };
+let sortParam = false;
+const sort = () => {
+  sortParam = !sortParam;
+  displayMovements(currentAccount.movements, sortParam);
+};
 btnLogin.addEventListener('click', loginFunction);
 btnTransfer.addEventListener('click', transfer);
 btnClose.addEventListener('click', deleteAcc);
 btnLoan.addEventListener('click', requestLoan);
-
+btnSort.addEventListener('click', sort);
